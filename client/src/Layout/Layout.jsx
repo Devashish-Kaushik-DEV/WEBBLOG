@@ -1,7 +1,7 @@
-import AppSidebar from '@/components/ui/AppSidebar'
-import Footer from '@/components/ui/Footer'
+import AppSidebar from '@/components/AppSidebar'
+import Footer from '@/components/Footer'
 import { SidebarProvider } from '@/components/ui/sidebar'
-import Topbar from '@/components/ui/Topbar'
+import Topbar from '@/components/Topbar'
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 
@@ -10,8 +10,10 @@ const Layout = () => {
     <SidebarProvider>
         <Topbar />
         <AppSidebar />
-        <main>
+        <main className='w-full'>
+          <div className='w-full min-h-[calc(100vh-45px)]'>
             <Outlet />
+          </div>
             <Footer />
         </main>
     </SidebarProvider>
