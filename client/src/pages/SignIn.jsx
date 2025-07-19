@@ -37,9 +37,29 @@ const SignIn = () => {
     },
   })
 
-  function onSubmit(values) {
-    console.log(values)
+  async function onSubmit(values) {
+    try {
+      const response = await fetch(`${getEnv('VITE_API_BASE_URL')}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(values),
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        showToast('error', data.message)
+        return
+      }
+
+      showToast('success', data.message)
+
+    } catch (error) {
+      showToast('error', error.message)
+    }
   }
+
 
   return (
     <div className="flex justify-center items-center h-screen w-screen">

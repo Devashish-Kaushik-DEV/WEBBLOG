@@ -8,7 +8,7 @@ import AuthRoute from './routes/Auth.route.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000;
 
 app.use(cookieParser());
 app.use(express.json());

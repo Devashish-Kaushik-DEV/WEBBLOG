@@ -25,15 +25,16 @@ const userSchema = new mongoose.Schema({
   },
   bio: {
     type: String,
-    required: true
+    trim: true 
   },
   avatar: {
     type: String,
-    required: true
+    trim: true 
   },
 }, {
   timestamps: true
 });
 
-const User = mongoose.model('User', userSchema, 'users');
+
+const User = mongoose.model('User', userSchema, 'user');
 export default User;

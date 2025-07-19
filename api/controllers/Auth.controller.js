@@ -21,13 +21,12 @@ export const register = async (req, res) => {
     const user = new User({
       name,
       email,
-      password: hashedPassword,
-      role
+      password: hashedPassword
     });
 
     await user.save();
 
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
     });
 
@@ -37,8 +36,7 @@ export const register = async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email,
-        role: user.role
+        email: user.email
       }
     });
 
@@ -46,6 +44,7 @@ export const register = async (req, res) => {
     return handleError(res, error);
   }
 };
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -61,7 +60,7 @@ export const login = async (req, res) => {
       return handleError(res, 'Invalid email or password.', 400);
     }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
     });
 

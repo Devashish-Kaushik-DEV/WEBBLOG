@@ -26,7 +26,7 @@ import { getEnv } from '@/helpers/getEnv'
 import { showToast } from '@/helpers/showToast'
 
 const formSchema = z.object({
-  username: z.string().min(2, 'Username must be at least 2 characters.'),
+  name: z.string().min(2, 'Username must be at least 2 characters.'),
   email: z.string().email(),
   password: z.string().min(6, 'Password must be at least 6 characters long.'),
   confirmPassword: z.string(),
@@ -36,13 +36,12 @@ const formSchema = z.object({
 })
 
 const SignUp = () => {
-
   const navigate = useNavigate()
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -50,23 +49,30 @@ const SignUp = () => {
   })
 
   async function onSubmit(values) {
+    const payload = {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    }
+
     try {
       const response = await fetch(`${getEnv('VITE_API_BASE_URL')}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(payload),
       })
       const data = await response.json()
       if (!response.ok) {
-        showToast('error',data.message)
+        showToast('error', data.message)
+        return
       }
 
       navigate(RouteSignIn)
-      showToast('success',data.message)
+      showToast('success', data.message)
     } catch (error) {
-      showToast('error',error.message)
+      showToast('error', error.message)
     }
   }
 
@@ -93,20 +99,15 @@ const SignUp = () => {
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
-
               <div className="grid gap-2">
                 <FormField
                   control={form.control}
-                  name="username"
+                  name="name"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Username</FormLabel>
                       <FormControl>
-                        <Input
-                          id="username"
-                          placeholder="Enter your username"
-                          {...field}
-                        />
+                        <Input id="name" placeholder="Enter your username" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -122,12 +123,7 @@ const SignUp = () => {
                     <FormItem>
                       <FormLabel>Email</FormLabel>
                       <FormControl>
-                        <Input
-                          id="email"
-                          type="email"
-                          placeholder="Enter your email address"
-                          {...field}
-                        />
+                        <Input id="email" type="email" placeholder="Enter your email" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -143,12 +139,7 @@ const SignUp = () => {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input
-                          id="password"
-                          type="password"
-                          placeholder="Create a password"
-                          {...field}
-                        />
+                        <Input id="password" type="password" placeholder="Create a password" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -164,12 +155,7 @@ const SignUp = () => {
                     <FormItem>
                       <FormLabel>Confirm Password</FormLabel>
                       <FormControl>
-                        <Input
-                          id="confirmPassword"
-                          type="password"
-                          placeholder="Confirm your password"
-                          {...field}
-                        />
+                        <Input id="confirmPassword" type="password" placeholder="Confirm your password" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
